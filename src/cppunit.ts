@@ -259,7 +259,7 @@ export class TestSuiteManager {
 
   async loadTests() : Promise<TestSuiteInfo> {
     for(let test of this.config.cppUnitExecutables) {
-      this.loadTest(test.xmlPath);
+      await this.loadTest(test.xmlPath);
     }
     return Promise.resolve<TestSuiteInfo>(this.buildTestSuiteInfo());
   }

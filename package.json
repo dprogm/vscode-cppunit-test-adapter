@@ -1,19 +1,18 @@
 {
-  "name": "vscode-example-test-adapter",
-  "displayName": "Example Test Explorer",
-  "description": "Run your Example tests in the Sidebar of Visual Studio Code",
-  "icon": "img/icon.png",
-  "author": "Holger Benl <hbenl@evandor.de>",
-  "publisher": "hbenl",
+  "name": "vscode-cppunit-test-adapter",
+  "displayName": "CppUnit Test Explorer",
+  "description": "Run your CppUnit tests in the Sidebar of Visual Studio Code",
+  "author": "Dirk Müller",
+  "publisher": "dprogm",
   "version": "0.0.1",
   "license": "MIT",
-  "homepage": "https://github.com/hbenl/vscode-example-test-adapter",
+  "homepage": "https://github.com/dprogm/vscode-cppunit-test-adapter",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hbenl/vscode-example-test-adapter.git"
+    "url": "https://github.com/dprogm/vscode-cppunit-test-adapter.git"
   },
   "bugs": {
-    "url": "https://github.com/hbenl/vscode-example-test-adapter/issues"
+    "url": "https://github.com/dprogm/vscode-cppunit-test-adapter/issues"
   },
   "categories": [
     "Other"
