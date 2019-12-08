@@ -56,6 +56,11 @@
       "type": "object",
       "title": "CppUnit Explorer configuration",
       "properties": {
+        "cppUnitExplorer.executables": {
+          "description": "Path to the test executable",
+          "type": "array",
+          "scope": "resource"
+        },
         "exampleExplorer.logpanel": {
           "description": "write diagnotic logs to an output panel",
           "type": "boolean",

@@ -15,7 +15,7 @@ export class ExampleAdapter implements TestAdapter {
 	private readonly testStatesEmitter = new vscode.EventEmitter<TestRunStartedEvent | TestRunFinishedEvent | TestSuiteEvent | TestEvent>();
 	private readonly autorunEmitter = new vscode.EventEmitter<void>();
 
-	testSuiteManager = new cppunit.TestSuiteManager();
+	testSuiteManager: cppunit.TestSuiteManager;
 
 	get tests(): vscode.Event<TestLoadStartedEvent | TestLoadFinishedEvent> { return this.testsEmitter.event; }
 	get testStates(): vscode.Event<TestRunStartedEvent | TestRunFinishedEvent | TestSuiteEvent | TestEvent> { return this.testStatesEmitter.event; }
@@ -32,6 +32,15 @@ export class ExampleAdapter implements TestAdapter {
 		this.disposables.push(this.testStatesEmitter);
 		this.disposables.push(this.autorunEmitter);
 
+		let paths = vscode.workspace.getConfiguration('cppUnitExplorer').get<Array<cppunit.TestExecutableSpecification>>('executables');
+		if(paths === undefined) {
+			paths = []
+		}
+		let config: cppunit.Config = {
+			cppUnitExecutables: paths
+		}
+		console.log(config);
+		this.testSuiteManager = new cppunit.TestSuiteManager(config);
 	}
 
 	async load(): Promise<void> {
