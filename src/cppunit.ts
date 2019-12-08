@@ -151,11 +151,19 @@ export class TestSuiteManager {
       let testInfo: Array<TestInfo> = [];
       for(let testCaseIdx = 0; testCaseIdx < testSuite.testCases.length; testCaseIdx++) {
         let testCase = testSuite.testCases[testCaseIdx];
-        testInfo.push({
+        let testCaseInfo: TestInfo = {
           type: 'test',
           id: this.makeUniqueIndex(testSuiteIdx, testCaseIdx),
           label: testCase.name
-        });
+        };
+        // File and line are only propagated in case of
+        // a test failure. Currently requires to reload
+        // all tests.
+        if((testCase.result !== undefined) && !testCase.result.result) {
+          testCaseInfo.file = testCase.result.filePath;
+          testCaseInfo.line = testCase.result.line;
+        }
+        testInfo.push(testCaseInfo);
       }
       testSuiteInfo.push({
         type: 'suite',
@@ -265,8 +273,8 @@ export class TestSuiteManager {
     return suite;
   }
 
-  async evaluateTestResults(xmlPath: string, reqIds: Array<Index>, testEventEmitter: vscode.EventEmitter<TestRunStartedEvent | TestRunFinishedEvent | TestSuiteEvent | TestEvent>) {
-    console.log(reqIds);
+  async evaluateTestResults(xmlPath: string, reqIds: Array<Index>, testEventEmitter: vscode.EventEmitter<
+    TestRunStartedEvent | TestRunFinishedEvent | TestSuiteEvent | TestEvent>) {
     await this.loadTest(xmlPath, (state: UpdateState) => {
       switch(state.kind) {
         case UpdateKind.NewTestCase: break;
@@ -278,8 +286,10 @@ export class TestSuiteManager {
               && (searchIdx.caseIndex === idx.caseIndex);
             });
           if(arIdx != -1) {
+            const isSuccess = state.result.result;
             testEventEmitter.fire(<TestEvent>{ type: 'test', test: this.makeUniqueIndex(idx.suiteIndex, idx.caseIndex),
-              state: state.result.result ? 'passed' : 'failed'});
+              state: isSuccess ? 'passed' : 'failed',
+              message: !isSuccess ? state.result.message : undefined});
             reqIds.splice(arIdx, 1);
           } else {
             // New test case or test suite.
